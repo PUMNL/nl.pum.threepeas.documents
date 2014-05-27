@@ -15,7 +15,11 @@ class CRM_ThreepeasDocuments_ProjectRefSpec implements CRM_Documents_Interface_E
   }
   
   public function getBAO() {
-    'CRM_Threepeas_BAO_PumProject';
+    return 'CRM_Threepeas_BAO_PumProject';
+  }
+  
+  public function getObjectName() {
+    return 'PumProject';
   }
   
   public function getEntityTableName() {
