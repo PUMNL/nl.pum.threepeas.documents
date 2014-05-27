@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/documents/threepeas/project</path>
+    <page_callback>CRM_Documents_Page_ProjectDocuments</page_callback>
+    <title>ProjectDocuments</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>

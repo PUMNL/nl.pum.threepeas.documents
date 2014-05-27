@@ -28,7 +28,32 @@ function threepeas_doc_civicrm_xmlMenu(&$files) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
 function threepeas_doc_civicrm_install() {
+  //check required extensions
+  if (!threepeas_doc_civicrm_checkextensions()) {
+    return;
+  }  
   return _threepeas_doc_civix_civicrm_install();
+}
+
+function threepeas_doc_civicrm_checkextension($extension) {
+  $extensionParams = array('full_name' => $extension);
+  $extensionDefaults = array();
+  $countryApiExtension = CRM_Core_BAO_Extension::retrieve($extensionParams, $extensionDefaults);
+  if (empty($countryApiExtension) || !$countryApiExtension->is_active) {
+    CRM_Core_Error::fatal("Could not enable extension, the required extension ".$extension." is not active in this environment!");
+    return false;
+  }
+  return true;
+}
+
+function threepeas_doc_civicrm_checkextensions() {
+  $extensionlist = array('org.civicoop.documents', 'nl.pum.threepeas');
+  foreach($extensionlist as $extension) {
+    if (!threepeas_doc_civicrm_checkextension($extension)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -46,6 +71,10 @@ function threepeas_doc_civicrm_uninstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function threepeas_doc_civicrm_enable() {
+  //check required extensions
+  if (!threepeas_doc_civicrm_checkextensions()) {
+    return;
+  }
   return _threepeas_doc_civix_civicrm_enable();
 }
 
@@ -105,4 +134,15 @@ function threepeas_doc_civicrm_caseTypes(&$caseTypes) {
  */
 function threepeas_doc_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _threepeas_doc_civix_civicrm_alterSettingsFolders($metaDataFolders);
+}
+
+function threepeas_doc_civicrm_threepeas_projectactions($project) {
+  $url = CRM_Utils_System::url('civicrm/documents/threepeas/project', "pid=".$project['id'], true);
+  $link = '<a class="action-item" title="Documents" href="'.$url.'">Documents</a>';
+  $return['threepeas_doc_civicrm_threepeas_projectactions'] = $link;
+  return $return;
+}
+
+function threepeas_doc_civicrm_documents_entity_ref_spec() {
+    return array('project' => new CRM_ThreepeasDocuments_ProjectRefSpec());
 }
