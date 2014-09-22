@@ -20,7 +20,15 @@ class CRM_Documents_Page_ProjectDocuments extends CRM_Core_Page {
     $documents = $documentRepo->getDocumentsByEntityId('civicrm_project', $this->projectId);
     
     $this->assign('documents', $documents);    
-    $this->assign('permission', 'edit');
+    /*
+     * only allow edit if user has 'edit all contacts'
+     */
+    if (CRM_Core_Permission::check('edit all contacts')) {
+      $permission = 'edit';
+    } else {
+      $permission = 'view';
+    }
+    $this->assign('permission', $permission);
     
     $doneUrl = CRM_Utils_System::url('civicrm/projectlist');
     $this->assign('doneUrl', $doneUrl);
